@@ -9,12 +9,11 @@ module.exports = {
         alias: {
           api: './src/api',
           components: './src/components',
-          navigation: './src/navigation',
+          routes: './src/routes',
           screens: './src/screens',
           theme: './src/theme',
           utils: './src/utils',
           types: './src/types',
-          images: './assets/images',
         },
       },
     ],
