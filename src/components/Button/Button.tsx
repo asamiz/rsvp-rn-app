@@ -22,7 +22,6 @@ const ButtonContainer = createRestyleComponent<
 export const Button = ({
   onPress,
   children,
-  disabled,
   testID,
   variant,
   ...rest
@@ -31,7 +30,6 @@ export const Button = ({
     <ButtonContainer
       onPress={onPress}
       testID={testID}
-      disabled={disabled}
       variant={variant}
       {...rest}>
       {children}
