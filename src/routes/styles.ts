@@ -24,5 +24,6 @@ export default StyleSheet.create({
   drawerLabel: {
     fontSize: RFValue(18),
     fontFamily: fonts.medium,
+    color: theme.colors.background,
   },
 });
