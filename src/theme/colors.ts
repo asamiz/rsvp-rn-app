@@ -1,8 +1,8 @@
 export default {
-  softPeach: '#F8F1F1',
+  softPeach: '#F1F6F9',
   tulipTree: '#E8AA42',
   zest: '#E57C23',
-  blueStone: '#025464',
+  blueStone: '#394867',
   guardsmanRed: '#CC0000',
   white: '#FFFFFF',
   black: '#000000',

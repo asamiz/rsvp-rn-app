@@ -1,16 +1,8 @@
-import {ThemeProvider} from '@shopify/restyle';
 import React from 'react';
-import {View, Text} from 'react-native';
-import theme from 'theme';
+import RootNavigator from 'routes';
 
 const App = () => {
-  return (
-    <ThemeProvider theme={theme}>
-      <View>
-        <Text>{'APP'}</Text>
-      </View>
-    </ThemeProvider>
-  );
+  return <RootNavigator />;
 };
 
 export default App;
