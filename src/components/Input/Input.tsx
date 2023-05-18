@@ -27,6 +27,7 @@ type InputProps = React.ComponentProps<typeof InputContainer> & {
   onBlur?: () => void;
   keyboardType?: KeyboardType;
   secureTextEntry?: boolean;
+  multiline?: boolean;
 };
 
 export const Input = ({
@@ -40,6 +41,7 @@ export const Input = ({
   onBlur,
   editable = true,
   secureTextEntry = false,
+  multiline = false,
   ...rest
 }: InputProps) => {
   return (
@@ -53,14 +55,15 @@ export const Input = ({
         editable={editable}
         onBlur={onBlur}
         keyboardType={keyboardType}
-        style={style.input}
+        style={styles.input}
         secureTextEntry={secureTextEntry}
+        multiline={multiline}
       />
       {right && right}
     </InputContainer>
   );
 };
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   input: {
     marginLeft: RWValue(8),
     flex: 1,

@@ -18,6 +18,8 @@ export const Selector = ({items, onSelectItem, selected}: Props) => {
       borderColor="secondary"
       borderWidth={3}
       flexDirection="row"
+      overflow="hidden"
+      marginBottom="m"
       borderRadius={RHValue(8)}>
       {items.map(item => (
         <Container key={item.id} flexGrow={1}>
