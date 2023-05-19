@@ -1,4 +1,9 @@
-import {RegistrationScreen, ReportsScreen, SearchScreen} from 'screens';
+import {
+  RegistrationScreen,
+  ReportsScreen,
+  SearchScreen,
+  UserScreen,
+} from 'screens';
 import {DrawerRoutes} from 'types';
 
 export const Routes: DrawerRoutes = {
@@ -16,5 +21,9 @@ export const Routes: DrawerRoutes = {
     name: 'SearchScreen',
     component: SearchScreen,
     title: 'Search',
+  },
+  user: {
+    name: 'UserScreen',
+    component: UserScreen,
   },
 };

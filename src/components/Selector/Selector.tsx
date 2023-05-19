@@ -7,8 +7,8 @@ import {RHValue} from 'utils';
 
 type Props = {
   items: SelectorItemData[];
-  onSelectItem: (selectedItem: SelectorItemData) => void;
-  selected: SelectorItemData;
+  onSelectItem: (value: string) => void;
+  selected: string;
 };
 
 export const Selector = ({items, onSelectItem, selected}: Props) => {
@@ -25,10 +25,10 @@ export const Selector = ({items, onSelectItem, selected}: Props) => {
         <Container key={item.id} flexGrow={1}>
           <Button
             activeOpacity={1}
-            onPress={() => onSelectItem(item)}
-            disabled={selected.id === item.id}
+            onPress={() => onSelectItem(item.value)}
+            disabled={selected === item.value}
             variant={
-              selected.id === item.id
+              selected === item.value
                 ? 'activeSelectorItem'
                 : 'inActiveSelectorItem'
             }>

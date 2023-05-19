@@ -1,6 +1,12 @@
+import {Profession} from './api';
+
 // Components Props Types
-export type SelectorItemData = {
+export interface SelectorItemData {
   id: number;
   label: string;
   value: string;
-};
+}
+
+export interface UserProfessionSelector extends SelectorItemData {
+  value: Profession;
+}

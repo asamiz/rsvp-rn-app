@@ -3,32 +3,22 @@ import {ActivityIndicator, ScrollView} from 'react-native';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import DatePicker from 'react-native-date-picker';
 import {Button, Input, Selector, Text} from 'components';
-import {SelectorItemData} from 'types';
+import {UserProfessionSelector, UserData} from 'types';
 import styles from './styles';
 import theme from 'theme';
 
-const selectorData: SelectorItemData[] = [
+const selectorData: UserProfessionSelector[] = [
   {
     id: 1,
     label: 'Student',
-    value: 'student',
+    value: 'Student',
   },
   {
     id: 2,
     label: 'Employed',
-    value: 'employed',
+    value: 'Employed',
   },
 ];
-
-type Inputs = {
-  name: string;
-  age: number;
-  dateOfBirth: Date;
-  profession: SelectorItemData;
-  locality: string;
-  numberOfGuests: number;
-  address: string;
-};
 
 const Registration = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -36,19 +26,19 @@ const Registration = () => {
     control,
     handleSubmit,
     formState: {errors, isValid, isLoading},
-  } = useForm<Inputs>({
+  } = useForm<UserData>({
     defaultValues: {
       name: '',
       age: 20,
       dateOfBirth: new Date('1923-01-01'),
       address: '',
-      profession: selectorData[0],
+      profession: selectorData[0].value,
       locality: '',
       numberOfGuests: 0,
     },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
+  const onSubmit: SubmitHandler<UserData> = data => console.log(data);
 
   return (
     <ScrollView
@@ -165,7 +155,7 @@ const Registration = () => {
           <Selector
             selected={value}
             items={selectorData}
-            onSelectItem={(item: SelectorItemData) => onChange(item)}
+            onSelectItem={(item: string) => onChange(item)}
           />
         )}
         name="profession"

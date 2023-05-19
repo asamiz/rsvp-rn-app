@@ -1,11 +1,13 @@
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {RouteProp} from '@react-navigation/native';
 import {ComponentType} from 'react';
+import {UserData} from './api';
 
 export type DrawerStackParamList = {
   RegistrationScreen: undefined;
   ReportsScreen: undefined;
   SearchScreen: undefined;
+  UserScreen: {user: UserData};
 };
 
 type DrawerRoute = {
@@ -18,6 +20,7 @@ export type DrawerRoutes = {
   registration: DrawerRoute;
   search: DrawerRoute;
   reports: DrawerRoute;
+  user: DrawerRoute;
 };
 
 // Navigation & Route Prop Types
@@ -51,3 +54,10 @@ export type SearchScreenRouteProp = RouteProp<
   DrawerStackParamList,
   'SearchScreen'
 >;
+
+export type UserScreenNavigationProp = DrawerNavigationProp<
+  DrawerStackParamList,
+  'UserScreen'
+>;
+
+export type UserScreenRouteProp = RouteProp<DrawerStackParamList, 'UserScreen'>;
