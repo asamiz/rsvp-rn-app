@@ -135,6 +135,7 @@ const Registration = () => {
               date={value}
               mode="date"
               minimumDate={new Date('1923-01-01')}
+              maximumDate={new Date()}
               onConfirm={date => {
                 setOpen(false);
                 onChange(date);
