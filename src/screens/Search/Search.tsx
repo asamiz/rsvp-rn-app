@@ -1,48 +1,54 @@
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
-import {Button, Container, Input, Text} from 'components';
+import {useNavigation} from '@react-navigation/native';
+import {useQuery} from '@tanstack/react-query';
 import React, {useState} from 'react';
+import {ActivityIndicator} from 'react-native';
+import {getUsers} from 'api';
+import {Button, Container, Input, Selector, Text} from 'components';
 import fonts from 'theme/fonts';
 import {RHValue} from 'utils';
 import styles from './styles';
-import {SearchScreenNavigationProp, UserData} from 'types';
-import {useNavigation} from '@react-navigation/native';
+import {
+  SearchScreenNavigationProp,
+  SelectorItemData,
+  UserData,
+  UsersResponse,
+} from 'types';
+import theme from 'theme';
+import {useDebounce} from 'hooks';
 
-const dummyData: UserData[] = [
+const searchFilters: SelectorItemData[] = [
   {
-    id: '1',
-    name: 'John Doe',
-    locality: 'Locality1',
-    age: 14,
-    dateOfBirth: new Date(),
-    address: 'Address 1',
-    numberOfGuests: 2,
-    profession: 'Student',
+    id: 1,
+    label: 'By Name',
+    value: 'name',
   },
   {
-    id: '2',
-    name: 'Jane Doe',
-    locality: 'Locality2',
-    age: 17,
-    dateOfBirth: new Date(),
-    address: 'Address 2',
-    numberOfGuests: 0,
-    profession: 'Student',
-  },
-  {
-    id: '3',
-    name: 'Frank Doe',
-    locality: 'Locality3',
-    age: 14,
-    dateOfBirth: new Date(),
-    address: 'Address 3',
-    numberOfGuests: 1,
-    profession: 'Employed',
+    id: 2,
+    label: 'By Locality',
+    value: 'locality',
   },
 ];
+
+const ListEmptyComponent = () => {
+  return (
+    <Container marginTop="xxl">
+      <Text>{'There are no results matches your search input'}</Text>
+    </Container>
+  );
+};
 
 const Search = () => {
   const navigation = useNavigation<SearchScreenNavigationProp>();
   const [searchValue, setSearchValue] = useState<string>('');
+  const [filter, setFilter] = useState<string>(searchFilters[0].value);
+  const debouncedSearch: string = useDebounce<string>(searchValue, 500);
+
+  const {data: response, isLoading} = useQuery<UsersResponse, Error>(
+    ['users', debouncedSearch, filter],
+    () => getUsers({filter, value: debouncedSearch}),
+    {staleTime: 500},
+  );
 
   const onChangeText = (value: string) => {
     setSearchValue(value);
@@ -54,19 +60,34 @@ const Search = () => {
         activeOpacity={1}
         variant="userCard"
         onPress={() => navigation.navigate('UserScreen', {user})}>
-        <Text>{user.name}</Text>
+        <Text marginBottom="s">{user.name}</Text>
         <Text color="secondary" fontFamily={fonts.bold}>
           {user.locality}
         </Text>
       </Button>
     );
   };
+
+  if (isLoading) {
+    return (
+      <ActivityIndicator
+        style={styles.activityIndicator}
+        color={theme.colors.secondary}
+      />
+    );
+  }
+
   return (
     <>
       <Container paddingHorizontal="m" marginTop="s">
         <Text variant="h1" marginBottom="m">
           {'Search'}
         </Text>
+        <Selector
+          items={searchFilters}
+          selected={filter}
+          onSelectItem={(value: string) => setFilter(value)}
+        />
         <Input
           value={searchValue}
           onChangeText={onChangeText}
@@ -76,8 +97,9 @@ const Search = () => {
       <FlashList
         contentContainerStyle={styles.contentContainer}
         estimatedItemSize={RHValue(80)}
-        data={dummyData}
+        data={response?.items.flat()}
         renderItem={renderItem}
+        ListEmptyComponent={<ListEmptyComponent />}
       />
     </>
   );
