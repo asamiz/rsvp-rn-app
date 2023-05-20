@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
-import {ActivityIndicator, ScrollView} from 'react-native';
+import {ActivityIndicator, Alert, ScrollView} from 'react-native';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import DatePicker from 'react-native-date-picker';
 import {Button, Input, Selector, Text} from 'components';
 import {UserProfessionSelector, UserData} from 'types';
 import styles from './styles';
 import theme from 'theme';
+import {useMutation} from '@tanstack/react-query';
+import {submitUserData} from 'api';
+import dayjs from 'dayjs';
 
 const selectorData: UserProfessionSelector[] = [
   {
@@ -22,23 +25,43 @@ const selectorData: UserProfessionSelector[] = [
 
 const Registration = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const {mutate, isLoading} = useMutation({
+    mutationFn: submitUserData,
+    onError: () =>
+      Alert.alert(
+        'Something went wrong',
+        'Something went wrong, please try again',
+      ),
+    onSuccess: () => {
+      Alert.alert(
+        'Registered Successfully',
+        'You have been registered successfully',
+      );
+      reset();
+    },
+  });
   const {
     control,
     handleSubmit,
-    formState: {errors, isValid, isLoading},
+    setValue,
+    formState: {errors},
+    reset,
   } = useForm<UserData>({
+    mode: 'onSubmit',
     defaultValues: {
       name: '',
-      age: 20,
+      age: undefined,
       dateOfBirth: new Date('1923-01-01'),
       address: '',
       profession: selectorData[0].value,
       locality: '',
-      numberOfGuests: 0,
+      numberOfGuests: undefined,
     },
   });
 
-  const onSubmit: SubmitHandler<UserData> = data => console.log(data);
+  const onSubmit: SubmitHandler<UserData> = (data: UserData) => {
+    mutate({...data});
+  };
 
   return (
     <ScrollView
@@ -49,7 +72,7 @@ const Registration = () => {
       </Text>
 
       {/** Name */}
-      <Text variant="label">{'Name'}</Text>
+      <Text variant="label">{'Name*'}</Text>
       <Controller
         control={control}
         rules={{
@@ -72,37 +95,8 @@ const Registration = () => {
         </Text>
       )}
 
-      {/** Age */}
-      <Text variant="label">{'Age'}</Text>
-      <Controller
-        control={control}
-        rules={{
-          required: 'Age field is required',
-          pattern: {
-            value: /^[1-9]?[0-9]{1}$|^100$/,
-            message: 'Please enter a valid age from 1 year to 100 years',
-          },
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            variant={errors.age ? 'error' : undefined}
-            keyboardType="number-pad"
-            placeholder="Age"
-            value={String(value)}
-            onBlur={onBlur}
-            onChangeText={onChange}
-          />
-        )}
-        name="age"
-      />
-      {errors.age && (
-        <Text variant="error" marginBottom="s">
-          {errors.age?.message}
-        </Text>
-      )}
-
       {/** DOB */}
-      <Text variant="label">{'Date of birth'}</Text>
+      <Text variant="label">{'Date of birth*'}</Text>
       <Controller
         control={control}
         rules={{
@@ -128,6 +122,10 @@ const Registration = () => {
               maximumDate={new Date()}
               onConfirm={date => {
                 setOpen(false);
+                setValue(
+                  'age',
+                  dayjs(new Date()).diff(date, 'year').toString(),
+                );
                 onChange(date);
               }}
               onCancel={() => {
@@ -144,8 +142,22 @@ const Registration = () => {
         </Text>
       )}
 
+      {/** Age */}
+      <Text variant="label">{'Age'}</Text>
+      <Controller
+        control={control}
+        render={({field: {value}}) => (
+          <Input
+            placeholder="Age calculated upon DOB selection"
+            value={value}
+            editable={false}
+          />
+        )}
+        name="age"
+      />
+
       {/** Profession */}
-      <Text variant="label">{'Profession'}</Text>
+      <Text variant="label">{'Profession*'}</Text>
       <Controller
         control={control}
         rules={{
@@ -162,7 +174,7 @@ const Registration = () => {
       />
 
       {/** Locality */}
-      <Text variant="label">{'Locality'}</Text>
+      <Text variant="label">{'Locality*'}</Text>
       <Controller
         control={control}
         rules={{
@@ -186,7 +198,7 @@ const Registration = () => {
       )}
 
       {/** NOG */}
-      <Text variant="label">{'Number of guests'}</Text>
+      <Text variant="label">{'Number of guests*'}</Text>
       <Controller
         control={control}
         rules={{
@@ -200,8 +212,8 @@ const Registration = () => {
           <Input
             variant={errors.numberOfGuests ? 'error' : undefined}
             keyboardType="number-pad"
-            placeholder="Number of guests"
-            value={String(value)}
+            placeholder="Number of guests from 0 to 2"
+            value={value}
             onBlur={onBlur}
             onChangeText={onChange}
           />
@@ -215,7 +227,7 @@ const Registration = () => {
       )}
 
       {/** Address */}
-      <Text variant="label">{'Address'}</Text>
+      <Text variant="label">{'Address*'}</Text>
       <Controller
         control={control}
         rules={{
@@ -239,14 +251,11 @@ const Registration = () => {
         </Text>
       )}
 
-      <Button
-        onPress={handleSubmit(onSubmit)}
-        disabled={!isValid || isLoading}
-        variant={!isValid ? 'disabled' : undefined}>
+      <Button onPress={handleSubmit(onSubmit)} disabled={isLoading}>
         {isLoading ? (
-          <ActivityIndicator color={theme.colors.background} />
+          <ActivityIndicator color={theme.colors.white} />
         ) : (
-          <Text color={!isValid ? 'background' : undefined}>{'Submit'}</Text>
+          <Text>{'Submit'}</Text>
         )}
       </Button>
     </ScrollView>

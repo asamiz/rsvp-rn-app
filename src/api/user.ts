@@ -1,4 +1,4 @@
-import {UsersRequestParams, UsersResponse} from 'types';
+import {UserData, UsersRequestParams, UsersResponse} from 'types';
 import {client} from './client';
 
 export const getUsers = async ({
@@ -8,4 +8,12 @@ export const getUsers = async ({
   return client
     .get<UsersResponse>(`/users?${filter}=${value}`, {})
     .then(response => response.data);
+};
+
+export const submitUserData = async (
+  data: UserData,
+): Promise<UsersResponse> => {
+  return client.post('/users', {
+    ...data,
+  });
 };

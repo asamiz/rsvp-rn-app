@@ -21,7 +21,7 @@ type InputProps = React.ComponentProps<typeof InputContainer> & {
   left?: JSX.Element;
   right?: JSX.Element;
   value: string;
-  placeholder: string;
+  placeholder?: string;
   onChangeText?: (arg: string) => void;
   editable?: boolean;
   onBlur?: () => void;

@@ -36,6 +36,7 @@ const DrawerStack = () => {
         drawerHideStatusBarOnOpen: true,
         drawerStyle: styles.drawer,
         drawerLabelStyle: styles.drawerLabel,
+        unmountOnBlur: true,
       }}>
       <Screen
         component={Routes.registration.component}
