@@ -9,11 +9,20 @@ type Props = {
   items: SelectorItemData[];
   onSelectItem: (value: string) => void;
   selected: string;
+  testID?: string;
+  selectorTestID?: string;
 };
 
-export const Selector = ({items, onSelectItem, selected}: Props) => {
+export const Selector = ({
+  items,
+  onSelectItem,
+  selected,
+  testID,
+  selectorTestID,
+}: Props) => {
   return (
     <Container
+      testID={testID}
       backgroundColor="background"
       borderColor="secondary"
       borderWidth={3}
@@ -24,6 +33,7 @@ export const Selector = ({items, onSelectItem, selected}: Props) => {
       {items.map(item => (
         <Container key={item.id} flexGrow={1}>
           <Button
+            testID={`${selectorTestID}-${item.id}`}
             activeOpacity={1}
             onPress={() => onSelectItem(item.value)}
             disabled={selected === item.value}
@@ -32,7 +42,9 @@ export const Selector = ({items, onSelectItem, selected}: Props) => {
                 ? 'activeSelectorItem'
                 : 'inActiveSelectorItem'
             }>
-            <Text>{item.label}</Text>
+            <Text testID={`${selectorTestID}-${item.id}-text`}>
+              {item.label}
+            </Text>
           </Button>
         </Container>
       ))}

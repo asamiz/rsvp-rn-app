@@ -98,7 +98,6 @@ const theme = createTheme({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      // paddingVertical: 'l',
       borderRadius: RHValue(8),
       borderColor: 'secondary',
       borderWidth: 2,

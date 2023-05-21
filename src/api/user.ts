@@ -13,6 +13,7 @@ export const getUsers = async ({
 export const submitUserData = async (
   data: UserData,
 ): Promise<UsersResponse> => {
+  console.log('DATA', data);
   return client.post('/users', {
     ...data,
   });

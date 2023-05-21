@@ -18,6 +18,7 @@ const InputContainer = createRestyleComponent<
 >([InputVariant], Container);
 
 type InputProps = React.ComponentProps<typeof InputContainer> & {
+  testID?: string;
   left?: JSX.Element;
   right?: JSX.Element;
   value: string;
@@ -42,12 +43,14 @@ export const Input = ({
   editable = true,
   secureTextEntry = false,
   multiline = false,
+  testID,
   ...rest
 }: InputProps) => {
   return (
-    <InputContainer marginBottom="s" variant={variant} {...rest}>
+    <InputContainer variant={variant} {...rest}>
       {left && left}
       <TextInput
+        testID={testID}
         value={value}
         placeholderTextColor={theme.colors.placeholder}
         onChangeText={onChangeText}
