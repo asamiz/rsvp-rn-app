@@ -2,3 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 # Will include running the unit tests before comitting
+
+yarn run test
